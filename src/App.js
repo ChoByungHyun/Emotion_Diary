@@ -10,6 +10,7 @@ import New from './pages/New';
 //Components
 import MyButton from './components/MyButton';
 import MyHeader from './components/MyHeader';
+import DiaryList from './components/DiaryList';
 
 
 const reducer = (state, action) => {
@@ -39,11 +40,49 @@ const reducer = (state, action) => {
 
 export const DiaryStateContext = React.createContext();
 export const DiaryDispatchContext = React.createContext();
+const dummyData = [
+  {
+    id: 1,
+    emotion: 1,
+    content: "오늘일기1번",
+    date: 1674072107757
+  },
+  {
+    id: 2,
+    emotion: 2,
+    content: "오늘일기2번",
+    date: 1674072107758
+  },
+  {
+    id: 3,
+    emotion: 3,
+    content: "오늘일기3번",
+    date: 1674072107759
+  },
+  {
+    id: 4,
+    emotion: 3,
+    content: "오늘일기4번",
+    date: 1674072107760
+  },
+  {
+    id: 5,
+    emotion: 5,
+    content: "오늘일기5번",
+    date: 1674072107761
+  },
+  {
+    id: 6,
+    emotion: 3,
+    content: "오늘일기6번",
+    date: 1774072107761
+  },
+]
 
 function App() {
+
   {/* 
-    const env = process.env;
-  env.PUBLIC_URL = env.PUBLIC_URL || "";
+
   
   <img src={process.env.PUBLIC_URL + '/assets/emotion1.png'}></img>
         <img src={process.env.PUBLIC_URL + '/assets/emotion2.png'}></img>
@@ -51,7 +90,8 @@ function App() {
         <img src={process.env.PUBLIC_URL + '/assets/emotion4.png'}></img>
         <img src={process.env.PUBLIC_URL + '/assets/emotion5.png'}></img> */}
 
-  const [data, dispatch] = useReducer(reducer, []);
+
+  const [data, dispatch] = useReducer(reducer, dummyData);
   const dataID = useRef(0);
 
   //CREATE
