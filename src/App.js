@@ -1,5 +1,6 @@
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React, { useReducer, useRef } from 'react';
 
 import Home from './pages/Home';
 import Diary from './pages/Diary';
@@ -10,55 +11,101 @@ import New from './pages/New';
 import MyButton from './components/MyButton';
 import MyHeader from './components/MyHeader';
 
+
+const reducer = (state, action) => {
+  let newState = [];
+  switch (action.type) {
+    case 'INIT':
+      return action.data;
+    case 'CREATE': {
+      newState = [action.data, ...state]
+      break;
+    }
+    case 'REMOVE': {
+      newState = state.filter((it) => it.id !== action.targetID);
+      break;
+    }
+    case 'EDIT': {
+      newState =
+        state.map((it) =>
+          it.id === action.data.id ? { ...action.data } : it)
+      break;
+    }
+    default:
+      return state;
+  }
+  return newState;
+}
+
+export const DiaryStateContext = React.createContext();
+export const DiaryDispatchContext = React.createContext();
+
 function App() {
-
-  const env = process.env;
+  {/* 
+    const env = process.env;
   env.PUBLIC_URL = env.PUBLIC_URL || "";
-  return (
-    <BrowserRouter>
-      <div className="App">
-
-        <MyHeader headtext={"App"}
-          leftChild={
-            <MyButton text={'왼쪽버튼'} onClick={() => alert("왼쪽 클릭")} />
-          }
-          rightChild={
-            <MyButton text={'오른쪽버튼'} onClick={() => alert("오른쪽 클릭")} />
-          }
-        />
-
-        <h1>app.js</h1>
-
-        <img src={process.env.PUBLIC_URL + '/assets/emotion1.png'}></img>
+  
+  <img src={process.env.PUBLIC_URL + '/assets/emotion1.png'}></img>
         <img src={process.env.PUBLIC_URL + '/assets/emotion2.png'}></img>
         <img src={process.env.PUBLIC_URL + '/assets/emotion3.png'}></img>
         <img src={process.env.PUBLIC_URL + '/assets/emotion4.png'}></img>
-        <img src={process.env.PUBLIC_URL + '/assets/emotion5.png'}></img>
+        <img src={process.env.PUBLIC_URL + '/assets/emotion5.png'}></img> */}
 
-        <MyButton
-          text={"버튼"}
-          onClick={() => alert("버튼")}
-          type={"positive"}></MyButton>
+  const [data, dispatch] = useReducer(reducer, []);
+  const dataID = useRef(0);
 
-        <MyButton
-          text={"버튼"}
-          onClick={() => alert("버튼")}
-          type={"nagative"}></MyButton>
+  //CREATE
+  const onCreate = (date, content, emotion) => {
+    dispatch({
+      type: "CREATE",
+      data: {
+        id: dataID.current,
+        date: new Date(date).getTime(),
+        content,
+        emotion,
 
-        <MyButton
-          text={"버튼"}
-          onClick={() => alert("버튼")}
-          type={"default"}></MyButton>
+      }
+    })
+    dataID.current += 1;
+  }
 
-        <Routes>
-          <Route path='/' element={<Home />}></Route>
-          <Route path='/new' element={<New />}></Route>
-          <Route path='/edit' element={<Edit />}></Route>
-          <Route path='/diary/:id' element={<Diary />}></Route>
-        </Routes>
+  //REMOVE
+  const OnRemove = (targetID) => {
+    dispatch({ type: "REMOVE", targetID });
+  }
+  //EDIT
+  const onEdit = (targetID, date, content, emotion) => {
+    dispatch({
+      type: "EDIT",
+      data: {
+        id: targetID,
+        date: new Date(date).getTime(),
+        content,
+        emotion,
+      }
+    })
+  }
 
-      </div>
-    </BrowserRouter>
+  return (
+    <DiaryStateContext.Provider value={data}>
+      <DiaryDispatchContext.Provider
+        value={{
+          onCreate,
+          onEdit,
+          OnRemove,
+        }}>
+        <BrowserRouter>
+          <div className='App'>
+            <Routes>
+              <Route path='/' element={<Home />}></Route>
+              <Route path='/new' element={<New />}></Route>
+              <Route path='/edit' element={<Edit />}></Route>
+              <Route path='/diary/:id' element={<Diary />}></Route>
+            </Routes>
+          </div>
+        </BrowserRouter>
+      </DiaryDispatchContext.Provider>
+    </DiaryStateContext.Provider>
   );
 }
 
