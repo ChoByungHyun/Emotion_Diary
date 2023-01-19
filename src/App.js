@@ -79,17 +79,6 @@ const dummyData = [
 ];
 
 function App() {
-  {
-    /* 
-
-  
-  <img src={process.env.PUBLIC_URL + '/assets/emotion1.png'}></img>
-        <img src={process.env.PUBLIC_URL + '/assets/emotion2.png'}></img>
-        <img src={process.env.PUBLIC_URL + '/assets/emotion3.png'}></img>
-        <img src={process.env.PUBLIC_URL + '/assets/emotion4.png'}></img>
-        <img src={process.env.PUBLIC_URL + '/assets/emotion5.png'}></img> */
-  }
-
   const [data, dispatch] = useReducer(reducer, dummyData);
   const dataID = useRef(0);
 
