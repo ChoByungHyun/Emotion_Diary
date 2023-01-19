@@ -38,14 +38,11 @@ const DiaryEditor = ({ isEdit, originData }) => {
     ) {
       if (!isEdit) {
         onCreate(date, content, emotion);
-        console.log("새글생성");
       } else {
         onEdit(originData.id, date, content, emotion);
-        console.log("글 수정");
       }
     }
 
-    onCreate(date, content, emotion);
     navigate("/", { replace: true });
   };
 
