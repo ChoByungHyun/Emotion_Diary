@@ -74,7 +74,7 @@ const dummyData = [
     id: 6,
     emotion: 3,
     content: "오늘일기6번",
-    date: 1774072107761,
+    date: 1684072107761,
   },
 ];
 
@@ -138,7 +138,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />}></Route>
               <Route path="/new" element={<New />}></Route>
-              <Route path="/edit" element={<Edit />}></Route>
+              <Route path="/edit/:id" element={<Edit />}></Route>
               <Route path="/diary/:id" element={<Diary />}></Route>
             </Routes>
           </div>
